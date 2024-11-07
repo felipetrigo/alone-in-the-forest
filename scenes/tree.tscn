@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw7gpg42npodj"]
+
+[ext_resource type="PackedScene" uid="uid://c5t5axk0bkw6n" path="res://blends/arvore-outlined.glb" id="1_tw8q0"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="arvore-outlined" parent="." instance=ExtResource("1_tw8q0")]
