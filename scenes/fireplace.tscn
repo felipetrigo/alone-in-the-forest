@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://b08spran4k80i"]
+
+[ext_resource type="PackedScene" uid="uid://qnvr32qm6equ" path="res://blends/fireplace.glb" id="1_7l0ob"]
+[ext_resource type="Texture2D" uid="uid://dhip4pin1geya" path="res://blends/kenney_particle-pack/PNG (Transparent)/fire_02.png" id="2_vk02r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ptkxn"]
+size = Vector3(1.4, 0.5, 1.4)
+
+[sub_resource type="Gradient" id="Gradient_sg3su"]
+colors = PackedColorArray(1, 1, 1, 1, 0.158472, 0.158472, 0.158472, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_veu3b"]
+gradient = SubResource("Gradient_sg3su")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xn21l"]
+lifetime_randomness = 0.5
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 1.0
+linear_accel_max = 1.0
+color_ramp = SubResource("GradientTexture1D_veu3b")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vci2g"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_vk02r")
+texture_filter = 0
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_akgqq"]
+material = SubResource("StandardMaterial3D_vci2g")
+
+[node name="fireplace" instance=ExtResource("1_7l0ob")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+shape = SubResource("BoxShape3D_ptkxn")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.264484, 0)
+amount = 16
+preprocess = 2.0
+fixed_fps = 120
+process_material = SubResource("ParticleProcessMaterial_xn21l")
+draw_pass_1 = SubResource("QuadMesh_akgqq")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.232384, 0)
+light_color = Color(1, 0.585076, 0.248883, 1)
+omni_range = 19.0816

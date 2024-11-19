@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://csjhvxonwe7og"]
+
+[ext_resource type="PackedScene" uid="uid://bie44o8cfyybl" path="res://blends/fence.glb" id="1_toduc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mfyol"]
+
+[node name="fence2" instance=ExtResource("1_toduc")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="fence" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fence/StaticBody3D" index="0"]
+transform = Transform3D(4.015, 0, 0, 0, -2.49155e-08, 9.265, 0, -0.57, -4.04986e-07, 0, 4.53828, 0)
+shape = SubResource("BoxShape3D_mfyol")

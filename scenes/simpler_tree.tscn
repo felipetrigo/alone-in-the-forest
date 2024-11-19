@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtp1b4l7ei8h2"]
+
+[ext_resource type="PackedScene" uid="uid://t8vxgmxcsdrc" path="res://blends/simpler tree.glb" id="1_afr5v"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_iq8c0"]
+height = 5.05053
+radius = 0.952131
+
+[node name="simpler tree" instance=ExtResource("1_afr5v")]
+
+[node name="Cone_001" parent="." index="0"]
+transform = Transform3D(0.422621, 0, -0.906307, 0, 1, 0, 0.906307, 0, 0.422621, 0, 1.31999, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4156, 0)
+shape = SubResource("CylinderShape3D_iq8c0")

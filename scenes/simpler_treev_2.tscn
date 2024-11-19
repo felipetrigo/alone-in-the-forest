@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://8rr6h5nwnque"]
+
+[ext_resource type="PackedScene" uid="uid://chnkoncasqiha" path="res://blends/simpler treev2.glb" id="1_y8kto"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lcvk8"]
+height = 5.05053
+radius = 0.952131
+
+[node name="simpler treev2" instance=ExtResource("1_y8kto")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cone_001" index="0"]
+transform = Transform3D(1, 0, 3.27826e-07, 0, 1, 0, -3.27826e-07, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cone_001/StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4156, 0)
+shape = SubResource("CylinderShape3D_lcvk8")

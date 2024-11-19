@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl85do0yp00pl"]
+
+[ext_resource type="PackedScene" uid="uid://yxqftflvol61" path="res://blends/magicstickv2.glb" id="1_fsstv"]
+
+[node name="magicstickv2" instance=ExtResource("1_fsstv")]
