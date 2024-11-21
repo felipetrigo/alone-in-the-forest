@@ -1,10 +1,20 @@
 [gd_scene load_steps=18 format=3 uid="uid://dd2djmleqm6ay"]
 
+[ext_resource type="Script" path="res://scenes/zaworld.gd" id="1_0xybu"]
 [ext_resource type="MeshLibrary" uid="uid://b7pqj0yyfjv83" path="res://meshs/tree_mesh.tres" id="1_bdor4"]
 [ext_resource type="PackedScene" uid="uid://c1kv6x1roi4pr" path="res://scenes/character.tscn" id="2_pkitf"]
 [ext_resource type="PackedScene" uid="uid://b08spran4k80i" path="res://scenes/fireplace.tscn" id="3_w2snt"]
 [ext_resource type="MeshLibrary" uid="uid://dacy3dhxacay5" path="res://meshs/fence_mesh.tres" id="4_ywtrj"]
 [ext_resource type="MeshLibrary" uid="uid://3w1p3g4pqcb3" path="res://meshs/column_mesh.tres" id="5_auv5l"]
+[ext_resource type="PackedScene" uid="uid://b07lf4hqwmea0" path="res://scenes/enemy_spawner.tscn" id="6_gtd5m"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a082m"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_etif3"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_aqvqi"]
+vertices = PackedVector3Array(-49.5, 0.5, -49.5, -49.5, 0.5, 49.5, 49.5, 0.5, 49.5, 49.5, 0.5, -49.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="Gradient" id="Gradient_e78bm"]
 offsets = PackedFloat32Array(0.746032, 1)
@@ -39,48 +49,13 @@ data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0,
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_flpeo"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a082m"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_etif3"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fhwnt"]
-sky_top_color = Color(0.154082, 0.329592, 0.495492, 1)
-sky_horizon_color = Color(0.000233081, 0.025384, 0.0516396, 1)
-
-[sub_resource type="Sky" id="Sky_kaue5"]
-sky_material = SubResource("ProceduralSkyMaterial_fhwnt")
-
-[sub_resource type="Environment" id="Environment_l0qqq"]
-background_mode = 2
-sky = SubResource("Sky_kaue5")
-ambient_light_source = 3
-ambient_light_color = Color(0.308537, 0.367639, 0.535328, 1)
-fog_enabled = true
-fog_density = 0.02
-
 [node name="world" type="Node3D"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_i738d")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_pehty")
-
-[node name="trees" type="GridMap" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh_library = ExtResource("1_bdor4")
-physics_material = SubResource("PhysicsMaterial_flpeo")
-cell_size = Vector3(1, 2, 1)
-cell_center_y = false
-data = {
-"cells": PackedInt32Array(10, 4, 0, 7, 65529, 0, 65531, 65522, 0, 65514, 65535, 0, 65505, 65520, 0, 65529, 10, 0, 65520, 65523, 0, 1, 65507, 0, 13, 65523, 0, 65512, 65498, 0, 65521, 65513, 0, 65500, 65504, 0, 65497, 65532, 0, 65519, 10, 0, 65510, 26, 0, 0, 22, 0, 25, 11, 0, 30, 65531, 0, 30, 65510, 0, 15, 65502, 0, 65527, 65500, 0, 65493, 65512, 0, 65496, 7, 0, 65518, 21, 0, 65501, 21, 0, 65530, 31, 0, 18, 17, 0, 23, 3, 0, 65514, 65528, 0, 65505, 8, 0, 65515, 13, 0, 65507, 17, 0, 65499, 13, 0, 8, 20, 0, 65530, 26, 0, 20, 9, 0, 37, 6, 0, 32, 25, 0, 18, 37, 0, 35, 35, 0, 28, 29, 0, 26, 34, 0, 20, 28, 0, 11, 33, 0, 10, 39, 0, 2, 41, 0, 65529, 44, 0, 65516, 43, 0, 65503, 43, 0, 65520, 37, 0, 65512, 45, 0, 65509, 38, 0, 65503, 32, 0, 65520, 28, 0, 42, 20, 0, 43, 29, 0, 45, 65533, 0, 40, 65522, 0, 28, 65519, 0, 17, 65511, 0, 10, 65500, 0, 32, 65493, 0, 47, 65497, 0, 65503, 65497, 0, 65494, 65521, 0, 65492, 25, 0, 65492, 36, 0, 15, 45, 0, 38, 44, 0, 65495, 65496, 0, 65511, 65507, 0)
-}
-metadata/_editor_floor_ = Vector3(0, 1, 0)
+script = ExtResource("1_0xybu")
 
 [node name="character" parent="." instance=ExtResource("2_pkitf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03096, 0.9941)
+
+[node name="target" type="Marker3D" parent="character"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.312882, 0.949792, 0, -0.949792, 0.312882, 0, 12.1031, 10.8097)
@@ -106,5 +81,33 @@ data = {
 "cells": PackedInt32Array(65437, 65437, 655360, 94, 65437, 655360, 94, 94, 655360, 65437, 94, 655360)
 }
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_l0qqq")
+[node name="navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_aqvqi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="navigation"]
+mesh = SubResource("PlaneMesh_i738d")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="navigation/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="navigation/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_pehty")
+
+[node name="enemySpawner" parent="navigation/MeshInstance3D" instance=ExtResource("6_gtd5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5393, 3.35104, -24.6709)
+
+[node name="enemySpawner2" parent="navigation/MeshInstance3D" instance=ExtResource("6_gtd5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.221, 5, 40.2777)
+
+[node name="trees" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh_library = ExtResource("1_bdor4")
+physics_material = SubResource("PhysicsMaterial_flpeo")
+cell_size = Vector3(1, 2, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(10, 4, 0, 7, 65529, 0, 65531, 65522, 0, 65514, 65535, 0, 65505, 65520, 0, 65529, 10, 0, 65520, 65523, 0, 1, 65507, 0, 13, 65523, 0, 65512, 65498, 0, 65521, 65513, 0, 65500, 65504, 0, 65497, 65532, 0, 65519, 10, 0, 65510, 26, 0, 0, 22, 0, 25, 11, 0, 30, 65531, 0, 30, 65510, 0, 15, 65502, 0, 65527, 65500, 0, 65493, 65512, 0, 65496, 7, 0, 65518, 21, 0, 65501, 21, 0, 65530, 31, 0, 18, 17, 0, 23, 3, 0, 65514, 65528, 0, 65505, 8, 0, 65515, 13, 0, 65507, 17, 0, 65499, 13, 0, 8, 20, 0, 65530, 26, 0, 20, 9, 0, 37, 6, 0, 32, 25, 0, 18, 37, 0, 35, 35, 0, 28, 29, 0, 26, 34, 0, 20, 28, 0, 11, 33, 0, 10, 39, 0, 2, 41, 0, 65529, 44, 0, 65516, 43, 0, 65503, 43, 0, 65520, 37, 0, 65512, 45, 0, 65509, 38, 0, 65503, 32, 0, 65520, 28, 0, 42, 20, 0, 43, 29, 0, 45, 65533, 0, 40, 65522, 0, 28, 65519, 0, 17, 65511, 0, 10, 65500, 0, 32, 65493, 0, 47, 65497, 0, 65503, 65497, 0, 65494, 65521, 0, 65492, 25, 0, 65492, 36, 0, 15, 45, 0, 38, 44, 0, 65495, 65496, 0, 65511, 65507, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 1, 0)
+
+[connection signal="dmg" from="character" to="navigation/MeshInstance3D/enemySpawner" method="_on_character_dmg"]

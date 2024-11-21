@@ -14,6 +14,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var neck := $neck
 @onready var cam := $neck/Camera3D
 @onready var head_animation := $neck/Camera3D/AnimationPlayer
+
+signal dmg
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -34,6 +36,8 @@ func _unhandled_input(event):
 			cam.rotation.x = clamp(cam.rotation.x,deg_to_rad(-55),deg_to_rad(60))
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("damage"):
+		emit_signal("dmg")
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 	# Add the gravity.
