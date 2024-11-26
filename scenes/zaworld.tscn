@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dd2djmleqm6ay"]
+[gd_scene load_steps=21 format=3 uid="uid://dd2djmleqm6ay"]
 
 [ext_resource type="Script" path="res://scenes/zaworld.gd" id="1_0xybu"]
 [ext_resource type="MeshLibrary" uid="uid://b7pqj0yyfjv83" path="res://meshs/tree_mesh.tres" id="1_bdor4"]
@@ -7,6 +7,22 @@
 [ext_resource type="MeshLibrary" uid="uid://dacy3dhxacay5" path="res://meshs/fence_mesh.tres" id="4_ywtrj"]
 [ext_resource type="MeshLibrary" uid="uid://3w1p3g4pqcb3" path="res://meshs/column_mesh.tres" id="5_auv5l"]
 [ext_resource type="PackedScene" uid="uid://b07lf4hqwmea0" path="res://scenes/enemy_spawner.tscn" id="6_gtd5m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6npme"]
+sky_top_color = Color(0.117007, 0.0944952, 0.29644, 1)
+sky_horizon_color = Color(0.531899, 0.525556, 0.57537, 1)
+ground_bottom_color = Color(0.0105894, 0.0077273, 0.00504146, 1)
+ground_horizon_color = Color(0.531899, 0.525556, 0.57537, 1)
+
+[sub_resource type="Sky" id="Sky_402sp"]
+sky_material = SubResource("ProceduralSkyMaterial_6npme")
+
+[sub_resource type="Environment" id="Environment_u8d47"]
+background_mode = 2
+sky = SubResource("Sky_402sp")
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a082m"]
 
@@ -52,6 +68,9 @@ data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0,
 [node name="world" type="Node3D"]
 script = ExtResource("1_0xybu")
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_u8d47")
+
 [node name="character" parent="." instance=ExtResource("2_pkitf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03096, 0.9941)
 
@@ -94,10 +113,7 @@ skeleton = NodePath("../..")
 shape = SubResource("ConcavePolygonShape3D_pehty")
 
 [node name="enemySpawner" parent="navigation/MeshInstance3D" instance=ExtResource("6_gtd5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5393, 3.35104, -24.6709)
-
-[node name="enemySpawner2" parent="navigation/MeshInstance3D" instance=ExtResource("6_gtd5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.221, 5, 40.2777)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
 [node name="trees" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

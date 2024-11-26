@@ -8,10 +8,9 @@ extends CharacterBody3D
 signal hp_change
 signal dead
 
-var hp = 5 : set = set_hp
-var dmg = 1 
+var hp = 3 : set = set_hp
 
-func take_damage():
+func take_damage(dmg):
 	set_hp(hp-dmg)
 
 func set_hp(new_hp):
@@ -32,3 +31,7 @@ func _physics_process(delta):
 	
 	velocity = velocity.lerp(direction*speed,accel*delta)
 	move_and_slide()
+
+
+func _on_damage_detector_body_part_hit(dam):
+	take_damage(dam)

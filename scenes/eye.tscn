@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckhhibp6ni7f6"]
+[gd_scene load_steps=9 format=3 uid="uid://ckhhibp6ni7f6"]
 
 [ext_resource type="Script" path="res://scenes/eye.gd" id="1_nk7f2"]
+[ext_resource type="Script" path="res://scenes/damage_detector.gd" id="2_rklbh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7et7a"]
 resource_name = "Material"
@@ -71,6 +72,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_c3g50")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_opajv"]
+radius = 0.749745
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_qqiw3"]
 
 [node name="eye" type="CharacterBody3D"]
@@ -83,7 +87,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.504201, 0)
 mesh = SubResource("ArrayMesh_1sipp")
 skeleton = NodePath("")
 
+[node name="damage_detector" type="Area3D" parent="Cube" groups=["enemy"]]
+script = ExtResource("2_rklbh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/damage_detector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.768365, 0)
+shape = SubResource("SphereShape3D_opajv")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_qqiw3")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[connection signal="body_part_hit" from="Cube/damage_detector" to="." method="_on_damage_detector_body_part_hit"]

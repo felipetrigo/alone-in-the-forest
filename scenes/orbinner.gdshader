@@ -6,7 +6,7 @@ void vertex() {
 	VERTEX.y += sin(TIME*1.)/10.;
 }
 void fragment() {
-    ALBEDO = vec3(1, 1, 1);
+    ALBEDO = vec3(0, 0, 0);
 	ROUGHNESS = 1.;
-	RIM = 0.001;
+	RIM = 1.;
 }

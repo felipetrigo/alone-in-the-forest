@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1kv6x1roi4pr"]
+[gd_scene load_steps=9 format=3 uid="uid://c1kv6x1roi4pr"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_j6ywa"]
 [ext_resource type="PackedScene" uid="uid://cl85do0yp00pl" path="res://scenes/magicstickv_2.tscn" id="2_xofba"]
@@ -22,6 +22,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("magicstickv2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.20874, -0.677765, -1.29996)]
+}
 
 [sub_resource type="Animation" id="Animation_vs71m"]
 resource_name = "head_bob"
@@ -39,10 +51,28 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 0.06, 0), Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_6a2fs"]
+resource_name = "shoot"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("magicstickv2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.1),
+"transitions": PackedFloat32Array(1, 0.435275, 1),
+"update": 0,
+"values": [Vector3(1.20874, -0.677765, -1.29996), Vector3(1.209, -0.678, -1.2), Vector3(1.20874, -0.677765, -1.29996)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2klyu"]
 _data = {
 "RESET": SubResource("Animation_o6q75"),
-"head_bob": SubResource("Animation_vs71m")
+"head_bob": SubResource("Animation_vs71m"),
+"shoot": SubResource("Animation_6a2fs")
 }
 
 [node name="character" type="CharacterBody3D"]
@@ -64,10 +94,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 cull_mask = 1048573
 fov = 61.875
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="neck/Camera3D"]
+[node name="head_anim" type="AnimationPlayer" parent="neck/Camera3D"]
 libraries = {
 "": SubResource("AnimationLibrary_2klyu")
 }
 
 [node name="magicstickv2" parent="neck/Camera3D" instance=ExtResource("2_xofba")]
 transform = Transform3D(-0.911948, 0.0967067, -0.398746, 0.206715, 0.94777, -0.242904, 0.354429, -0.303943, -0.884307, 1.20874, -0.677765, -1.29996)
+
+[node name="RayCast3D" type="RayCast3D" parent="neck/Camera3D/magicstickv2"]
+transform = Transform3D(-0.911948, 0.206714, 0.354429, 0.0967072, 0.947768, -0.303942, -0.398746, -0.242904, -0.884307, 1.2448, 0.153323, -1.02382)
+target_position = Vector3(0, 0, -7)
+
+[node name="stick_anim" type="AnimationPlayer" parent="neck/Camera3D"]
+libraries = {
+"": SubResource("AnimationLibrary_2klyu")
+}

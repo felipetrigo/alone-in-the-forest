@@ -13,7 +13,13 @@ var target_cam_rotation = 0.0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var neck := $neck
 @onready var cam := $neck/Camera3D
-@onready var head_animation := $neck/Camera3D/AnimationPlayer
+@onready var head_animation := $neck/Camera3D/head_anim
+@onready var stick_animation := $neck/Camera3D/stick_anim
+@onready var gun_cast := $neck/Camera3D/magicstickv2/RayCast3D
+@onready var stick := $neck/Camera3D/magicstickv2
+
+var orb = load("res://scenes/orb_energy.tscn")
+var instance
 
 signal dmg
 func _ready():
@@ -37,7 +43,14 @@ func _unhandled_input(event):
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("damage"):
-		emit_signal("dmg")
+		stick_animation.play("shoot")
+		var instance = orb.instantiate()
+		instance.position = gun_cast.global_position
+		instance.transform.basis =  gun_cast.global_transform.basis
+		get_parent().get_tree().get_root().add_child(instance)
+		#emit_signal("dmg")
+		
+		#damage translator
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 	# Add the gravity.
