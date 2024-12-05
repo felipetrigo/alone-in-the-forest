@@ -20,6 +20,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var paused = false
 var orb = load("res://scenes/orb_energy.tscn")
 var instance
+@onready var health_bar := $healthBar
 @onready var pause_interface := get_parent().get_tree().get_root().get_node("world/quitButton")
 var health = 5
 signal dmg
@@ -27,9 +28,19 @@ signal dmg
 func hurt(hit_point):
 	if hit_point < health:
 		health -= hit_point
+		health_bar.value = health
 	else:
 		health = 0
+		health_bar.value = health
+	if health == 0 :
+		die()
+		
+
+func die():
+	get_tree().reload_current_scene()
+
 func _ready():
+	health_bar.value = health
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
@@ -99,3 +110,9 @@ func _on_quit_button_resume() -> void:
 	pause_interface.visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	get_tree().paused = false
+
+
+
+
+func _on_damage_detector_damage_player(dam: Variant) -> void:
+	hurt(1) # Replace with function body.

@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1kv6x1roi4pr"]
+[gd_scene load_steps=13 format=3 uid="uid://c1kv6x1roi4pr"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_j6ywa"]
 [ext_resource type="PackedScene" uid="uid://cl85do0yp00pl" path="res://scenes/magicstickv_2.tscn" id="2_xofba"]
+[ext_resource type="Script" path="res://scenes/player_damage_detector.gd" id="3_41vc0"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3h44k"]
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_i13ik"]
-points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607, 0.498884, 0.169713, 0.559144, 0.464172, 0.231051, -0.803591, 0.320455, 0.40741, 0.651043, -0.243523, -0.482789, 0.594843, 0.0822132, -0.362868, -0.682312, 0.289697, 0.469044, -0.654529, -0.0662713, -0.127444, 0.842701, -0.338103, -0.393435, -0.683942, -0.244717, 0.438255, 0.623309, 0.200849, 0.0841477, 0.977454, 0.114795, -0.0682023, -0.976458, -0.12927, 0.20055, -0.563129, -0.451454, -0.185527, 0.595453, -0.453475, -0.273363, 0.592268, 0.407754, -0.00693649, -0.476823, 0.49966, 0.375821, -0.588614, 0.316955, 0.111579, 0.563059, -0.481177, -0.41725, 0.527866, -0.270497, -0.484546, -0.596972, -0.0665097, -0.279747, 0.908561, 0.0533361, -0.250197, -0.880712, 0.205319, 0.263647, -0.902771, -0.127394, 0.293368, 0.871526, -0.157196, 0.373412, -0.526319, -0.328246, 0.499663, 0.476641, -0.00688856, 0.0531056, 0.875001, 0.324703, -0.154543, -0.590854, 0.465879, -0.0972799, -0.782358, -0.398188, -0.387649, -0.498171, 0.31565, -0.30068, -0.587995, -0.388901)
+[sub_resource type="BoxShape3D" id="BoxShape3D_cggik"]
+size = Vector3(0.581581, 1.2583, 0.619354)
 
 [sub_resource type="Animation" id="Animation_o6q75"]
 length = 0.001
@@ -75,17 +76,31 @@ _data = {
 "shoot": SubResource("Animation_6a2fs")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjvo3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hmef"]
+bg_color = Color(0.282225, 0.673036, 0.233172, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 0.6, 0.6, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_frrch"]
+
 [node name="character" type="CharacterBody3D"]
 script = ExtResource("1_j6ywa")
 MOUSE_SPEED = 0.01
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_3h44k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("ConvexPolygonShape3D_i13ik")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00416946, 0.621, -0.00608826)
+visible = false
+shape = SubResource("BoxShape3D_cggik")
 
 [node name="neck" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -110,3 +125,28 @@ target_position = Vector3(0, 0, -7)
 libraries = {
 "": SubResource("AnimationLibrary_2klyu")
 }
+
+[node name="healthBar" type="ProgressBar" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -36.0
+offset_right = 136.0
+offset_bottom = -17.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_pjvo3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0hmef")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[node name="damage_detector" type="Area3D" parent="." groups=["player"]]
+script = ExtResource("3_41vc0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="damage_detector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_frrch")
+
+[connection signal="area_entered" from="damage_detector" to="damage_detector" method="_on_area_entered"]
+[connection signal="damage_player" from="damage_detector" to="." method="_on_damage_detector_damage_player"]
