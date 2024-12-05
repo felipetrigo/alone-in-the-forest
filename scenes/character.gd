@@ -17,11 +17,18 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var stick_animation := $neck/Camera3D/stick_anim
 @onready var gun_cast := $neck/Camera3D/magicstickv2/RayCast3D
 @onready var stick := $neck/Camera3D/magicstickv2
-
+var paused = false
 var orb = load("res://scenes/orb_energy.tscn")
 var instance
-
+@onready var pause_interface := get_parent().get_tree().get_root().get_node("world/quitButton")
+var health = 5
 signal dmg
+
+func hurt(hit_point):
+	if hit_point < health:
+		health -= hit_point
+	else:
+		health = 0
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -42,17 +49,20 @@ func _unhandled_input(event):
 			cam.rotation.x = clamp(cam.rotation.x,deg_to_rad(-55),deg_to_rad(60))
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("damage"):
+	if Input.is_action_just_pressed("damage") and paused == false:
 		stick_animation.play("shoot")
 		var instance = orb.instantiate()
 		instance.position = gun_cast.global_position
 		instance.transform.basis =  gun_cast.global_transform.basis
 		get_parent().get_tree().get_root().add_child(instance)
 		#emit_signal("dmg")
-		
 		#damage translator
 	if Input.is_action_just_pressed("quit"):
-		get_tree().quit()
+		paused = true
+		pause_interface.visible = true
+		get_tree().paused = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -78,3 +88,14 @@ func _physics_process(delta):
 	if input_dir != Vector2():
 		head_animation.play("head_bob");
 	move_and_slide()
+
+
+func _on_quit_button_quit() -> void:
+	get_tree().quit()
+
+
+func _on_quit_button_resume() -> void:
+	paused = false
+	pause_interface.visible = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	get_tree().paused = false
