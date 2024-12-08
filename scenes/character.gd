@@ -17,12 +17,33 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var stick_animation := $neck/Camera3D/stick_anim
 @onready var gun_cast := $neck/Camera3D/magicstickv2/RayCast3D
 @onready var stick := $neck/Camera3D/magicstickv2
-
+@onready var pause_menu := get_parent().get_tree().get_root().get_node("world/pause_menu")
+@onready var healthBar := $ProgressBar
+@onready var main_menu := $Control
+var paused = false
 var orb = load("res://scenes/orb_energy.tscn")
 var instance
+var health = 5
 
-signal dmg
+func hurt(hit_point):
+	if hit_point < health:
+		health -= hit_point
+		healthBar.value = health
+	else:
+		health = 0
+		healthBar.value = health
+		die()
+
+func die():
+	main_menu.visible = true
+	paused = true
+	get_tree().paused = paused
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 func _ready():
+	pausing(false)
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	healthBar.value = health
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
@@ -42,17 +63,18 @@ func _unhandled_input(event):
 			cam.rotation.x = clamp(cam.rotation.x,deg_to_rad(-55),deg_to_rad(60))
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("damage"):
+	if Input.is_action_just_pressed("damage") and paused==false:
 		stick_animation.play("shoot")
 		var instance = orb.instantiate()
 		instance.position = gun_cast.global_position
 		instance.transform.basis =  gun_cast.global_transform.basis
 		get_parent().get_tree().get_root().add_child(instance)
-		#emit_signal("dmg")
 		
-		#damage translator
+
 	if Input.is_action_just_pressed("quit"):
-		get_tree().quit()
+		pausing(true)
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -78,3 +100,30 @@ func _physics_process(delta):
 	if input_dir != Vector2():
 		head_animation.play("head_bob");
 	move_and_slide()
+
+
+
+func _on_pause_menu_resume():
+	pausing(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _on_pause_menu_quit():
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+func pausing(boolean):
+	paused = boolean
+	pause_menu.visible = paused
+	get_tree().paused = paused
+
+func _on_player_damage_detector_damage_player(dam):
+	hurt(1)
+
+
+func _on_control_quit():
+	get_tree().quit()
+
+func _on_control_retry():
+	pausing(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	get_tree().reload_current_scene()

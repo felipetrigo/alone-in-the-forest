@@ -20,7 +20,7 @@ func set_hp(new_hp):
 		die()
 
 func die():
-	emit_signal("dead")
+	dead.emit("dead_enemy")
 	queue_free()
 
 func _physics_process(delta):

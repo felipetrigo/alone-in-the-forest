@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1kv6x1roi4pr"]
+[gd_scene load_steps=14 format=3 uid="uid://c1kv6x1roi4pr"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_j6ywa"]
 [ext_resource type="PackedScene" uid="uid://cl85do0yp00pl" path="res://scenes/magicstickv_2.tscn" id="2_xofba"]
+[ext_resource type="Script" path="res://scenes/player_damage_detector.gd" id="3_sn4e3"]
+[ext_resource type="PackedScene" uid="uid://2ihsl83a6mrm" path="res://scenes/death_control_panel.tscn" id="4_vo6sn"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3h44k"]
 
@@ -75,6 +77,28 @@ _data = {
 "shoot": SubResource("Animation_6a2fs")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrakx"]
+bg_color = Color(0.834614, 0.834614, 0.834614, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 30
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbk04"]
+bg_color = Color(0.248347, 0.695573, 0.482827, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 10
+corner_radius_top_right = 30
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 30
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8wkpt"]
+radius = 0.538727
+height = 2.05822
+
 [node name="character" type="CharacterBody3D"]
 script = ExtResource("1_j6ywa")
 MOUSE_SPEED = 0.01
@@ -103,10 +127,40 @@ libraries = {
 transform = Transform3D(-0.911948, 0.0967067, -0.398746, 0.206715, 0.94777, -0.242904, 0.354429, -0.303943, -0.884307, 1.20874, -0.677765, -1.29996)
 
 [node name="RayCast3D" type="RayCast3D" parent="neck/Camera3D/magicstickv2"]
-transform = Transform3D(-0.911948, 0.206714, 0.354429, 0.0967072, 0.947768, -0.303942, -0.398746, -0.242904, -0.884307, 1.2448, 0.153323, -1.02382)
+transform = Transform3D(-0.91679, 0.228672, 0.327423, 0.133233, 0.948002, -0.289032, -0.376491, -0.221357, -0.899586, 1.2448, 0.153323, -1.02382)
 target_position = Vector3(0, 0, -7)
 
 [node name="stick_anim" type="AnimationPlayer" parent="neck/Camera3D"]
 libraries = {
 "": SubResource("AnimationLibrary_2klyu")
 }
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -28.0
+offset_right = 128.0
+offset_bottom = -12.0
+theme_override_styles/background = SubResource("StyleBoxFlat_wrakx")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gbk04")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[node name="player_damage_detector" type="Area3D" parent="."]
+script = ExtResource("3_sn4e3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player_damage_detector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_8wkpt")
+
+[node name="Control" parent="." instance=ExtResource("4_vo6sn")]
+visible = false
+mouse_filter = 1
+
+[connection signal="area_entered" from="player_damage_detector" to="player_damage_detector" method="_on_area_entered"]
+[connection signal="damage_player" from="player_damage_detector" to="." method="_on_player_damage_detector_damage_player"]
+[connection signal="quit" from="Control" to="." method="_on_control_quit"]
+[connection signal="retry" from="Control" to="." method="_on_control_retry"]

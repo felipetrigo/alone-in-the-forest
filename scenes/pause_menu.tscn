@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwpn3vihpb0xq"]
+
+[ext_resource type="Script" path="res://scenes/pause_menu.gd" id="1_7syyy"]
+
+[node name="pause_menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7syyy")
+
+[node name="organizador" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 28.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RESUME" type="Button" parent="organizador"]
+layout_mode = 2
+text = "RESUME"
+
+[node name="QUIT" type="Button" parent="organizador"]
+layout_mode = 2
+text = "QUIT"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -54.0
+offset_top = 16.0
+offset_right = 58.0
+offset_bottom = 39.0
+grow_horizontal = 2
+text = "GAME PAUSED"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="organizador/RESUME" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="organizador/QUIT" to="." method="_on_quit_pressed"]

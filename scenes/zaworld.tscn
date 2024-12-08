@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dd2djmleqm6ay"]
+[gd_scene load_steps=22 format=3 uid="uid://dd2djmleqm6ay"]
 
 [ext_resource type="Script" path="res://scenes/zaworld.gd" id="1_0xybu"]
 [ext_resource type="MeshLibrary" uid="uid://b7pqj0yyfjv83" path="res://meshs/tree_mesh.tres" id="1_bdor4"]
@@ -7,6 +7,7 @@
 [ext_resource type="MeshLibrary" uid="uid://dacy3dhxacay5" path="res://meshs/fence_mesh.tres" id="4_ywtrj"]
 [ext_resource type="MeshLibrary" uid="uid://3w1p3g4pqcb3" path="res://meshs/column_mesh.tres" id="5_auv5l"]
 [ext_resource type="PackedScene" uid="uid://b07lf4hqwmea0" path="res://scenes/enemy_spawner.tscn" id="6_gtd5m"]
+[ext_resource type="PackedScene" uid="uid://dwpn3vihpb0xq" path="res://scenes/pause_menu.tscn" id="8_1e8e1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6npme"]
 sky_top_color = Color(0.117007, 0.0944952, 0.29644, 1)
@@ -126,4 +127,11 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
-[connection signal="dmg" from="character" to="navigation/MeshInstance3D/enemySpawner" method="_on_character_dmg"]
+[node name="pause_menu" parent="." instance=ExtResource("8_1e8e1")]
+process_mode = 3
+visible = false
+mouse_filter = 1
+mouse_force_pass_scroll_events = false
+
+[connection signal="quit" from="pause_menu" to="character" method="_on_pause_menu_quit"]
+[connection signal="resume" from="pause_menu" to="character" method="_on_pause_menu_resume"]
